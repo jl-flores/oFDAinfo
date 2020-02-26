@@ -1,10 +1,22 @@
+# Work on this code began February 25th 2020
 
+# AS OF RIGHT NOW THEY BOTH WORK, need to keep checking then move on and make it output the data in some interesting way
 
-# find_ndc("brand_name", "humira")
-
+hum_broken <- find_ndc("generic_name", "infliximab")
+hum_broken <- query("brand_name", "humira")
+ust_works <- query("brand_name", "stelara")
+ust_works_full <- find_ndc("brand_name", "stelara")
+ust_works_full <- find_ndc("brand_name", "ustekinumab")
 
 find_ndc <- function(name.category, name) {
     run <- query(name.category, name)
+    # checking to make sure some data was found
+    if(length(run) == 0) {
+        stop("There are no results for this combination of category and name. 
+             Are you sure they are correct?")
+    }
+    
+    # if data was found, run the next step
     df_run <- dataframed_unique(run)
     return(df_run)
 }
@@ -39,11 +51,14 @@ dataframed_unique <- function(queried.df) {
     
     output_df <- queried.df %>% 
         select(-openfda) %>% 
-        unnest_longer(packaging) %>% 
-        unnest_longer(route) %>% 
-        unnest_longer(active_ingredients) %>% 
-        select(product_ndc:brand_name, route, product_type:brand_name_base)
-    
+        unnest_longer(packaging)
+        # unnest_longer(route) %>% 
+        # unnest_longer(active_ingredients) %>% 
+        # select(product_ndc:brand_name, route, product_type:brand_name_base)
+        # 
     return(output_df)
 }
+
+
+
 
