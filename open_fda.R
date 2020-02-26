@@ -10,7 +10,6 @@ x = fda_query("/drug/ndc.json") %>%
     fda_exec()
 # str_c(x, )
 
-%>% 
     fda_exec()
 y = fda_query("/drug/ndc.json") %>% 
     fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
