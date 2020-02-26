@@ -1,59 +1,49 @@
-#devtools::install_github("ropenhealth/openfda")
-
-library(openfda)
-library(tidyverse)
 
 
-# this works. 
-# TURNS OUT THAT THERE IS ALL THE INFO IF YOU ARE WILLING TO LOOK WITHIN THE PACKAGING DATASET!!
-x <-  fda_query("/drug/ndc.json") %>% 
-    fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
-    fda_limit(5) %>% 
-    fda_filter("brand_name","Stelara") %>% 
-    fda_search() %>% 
-    fda_exec()
+# find_ndc("brand_name", "humira")
 
-#this here is all the data. need to figure out how to add the data within packaging to each datapoint 
-df <- 
-    x$packaging %>% 
-    bind_rows() %>% 
-    as_tibble()
-# UNNESTS ALL THE DATA
-df <- x %>%
-    select(-openfda) %>% 
-    unnest_longer(packaging) %>% 
-    unnest_longer(route) %>% 
-#    unnest_longer(pharm_class) %>% 
-    unnest_longer(active_ingredients) 
-df <- df %>%
-    select(product_ndc:brand_name,
-           route, 
-           product_type:brand_name_base)
-# df <- rename(df, c("packaging.marketing_start_date" = "marketing_start_date", "packaging.package_ndc" = "ndc", "pachaging.description" = "description", "packaging.sample" = "sample"))
+
+find_ndc <- function(name.category, name) {
+    run <- query(name.category, name)
+    df_run <- dataframed_unique(run)
+    return(df_run)
+}
+
+
+
+
+query <- function(search.list, search.drug) {
+    # this function takes a search.list (like "generic_name" or "brand_name")
+    # and then the name of the drug you are interested in and outputs a
+    # dataframe from the openfda
+    require(openfda)
+    require(dplyr)
     
+    query_text  <- fda_query("/drug/ndc.json") %>% 
+        fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
+        fda_limit(100) %>% 
+        fda_filter(search.list, search.drug) %>% 
+        fda_search() %>% 
+        fda_exec()
+    return(query_text)
     
-# bind_rows(packaging) %>% 
-#     as_tibble()
-#     
-# 
-# y = fda_query("/drug/ndc.json") %>% 
-#     fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
-#     fda_filter("generic_name", "methotrexate") %>% 
-#     # fda_count("generic_name") %>% 
-#     fda_search() %>% 
-#     fda_exec()
-# y = fda_query("/drug/ndc.json") %>% 
-#     fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
-#     # fda_filter("generic_name", "methotrexate") %>% 
-#     fda_count("brand_name") %>% 
-#     fda_exec()
-# 
-#  # https://api.fda.gov/drug/label.json?search=humira&skip=3&api_key=kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy
-# #this gives 15
-# 
-# 
-# # Need to figure out how to get all the (all the entries) into the data
-# 
-# 
-# df <- as_tibble(x) %>% 
-#     select(-openfda)
+}
+
+
+dataframed_unique <- function(queried.df) {
+    # This function takes the out output of a drug query and turns it into a
+    # database where each row is different drug entry
+    require(openfda)
+    require(dplyr)
+    require(tidyr)
+    
+    output_df <- queried.df %>% 
+        select(-openfda) %>% 
+        unnest_longer(packaging) %>% 
+        unnest_longer(route) %>% 
+        unnest_longer(active_ingredients) %>% 
+        select(product_ndc:brand_name, route, product_type:brand_name_base)
+    
+    return(output_df)
+}
+
