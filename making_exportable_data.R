@@ -25,5 +25,3 @@ openfda_tidydf <- function(data.frame.drug) {
 }
 
 
-
-
