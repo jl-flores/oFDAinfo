@@ -34,6 +34,20 @@ output_csv <- function(..., append_existing = FALSE ) {
     
 }
 
+ndc_query <- function(..., append = FALSE) {
+    queries <- list(...)
+    num_drugs <- length(queries)
+    combined_df <- vector("list", length = num_drugs)
+    
+    for(ind_drug in 1:num_drugs){
+        param <- queries[[ind_drug]][1]
+        drug  <- queries[[ind_drug]][2]
+        df_drug <- find_ndc(param, drug)
+        combined_df[[ind_drug]] <- df_drug
+    }
+    
+    output_csv(combined_df, append_existing = append)
+}
 
 
 
