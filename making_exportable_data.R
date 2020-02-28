@@ -25,15 +25,14 @@ openfda_tidydf <- function(data.frame.drug) {
 }
 
 
-output_csv <- function(append_existing = FALSE, ...) {
+output_csv <- function(..., append_existing = FALSE ) {
     # Outputs the data into a csv format. If you already have an existing csv
     # with name "ndc_codes" and you simply want to add to the end of that then
     # you can set append_existing = TRUE
     combined <- dplyr::bind_rows(...)
-    readr::write_file(combined, )
+    print(combined)
+    readr::write_csv(combined, path = "fdc_codes.csv", append = append_existing)
     
-    
-
 }
 
 
