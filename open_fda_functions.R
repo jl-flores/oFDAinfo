@@ -22,6 +22,7 @@ query <- function(search.list, search.drug, limit = 100, skip = 0) {
     # dataframe from the openfda
     require(openfda)
     require(dplyr)
+    require(purrr)
     
     .query_text  <- function(search.list, search.drug, limit = 100, skip){
         fda_query("/drug/ndc.json") %>% 
@@ -48,6 +49,7 @@ query <- function(search.list, search.drug, limit = 100, skip = 0) {
             skip <- 100 * index
             index <- index + 1
         } 
+        output_list <- discard(output_list, is.null)
         return(output_list)
     }  
      
