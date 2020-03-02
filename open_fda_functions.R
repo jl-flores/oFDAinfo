@@ -2,12 +2,7 @@
 
 find_ndc <- function(name.category, name) {
     run <- query(name.category, name)
-    # checking to make sure some data was found
-    if(length(run) == 0) {
-        stop("There are no results for this combination of category and name. 
-             Are you sure they are correct?")
-    }
-    
+
     # if data was found, run the next step
     df_run <- dataframed_unique(run)
     return(df_run)
@@ -35,6 +30,13 @@ query <- function(search.list, search.drug, limit = 100, skip = 0) {
     }
     
     queried <- .query_text(search.list, search.drug, skip = 0)
+    # checking to make sure some data was found
+    if(nrow(queried) == 0) {
+        stop("There are no results for this combination of category and name. 
+             Are you sure they are correct?")
+    }
+    
+    
     # looping to get all data
     if (nrow(queried) != 100) {
         return(queried)
