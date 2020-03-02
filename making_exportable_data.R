@@ -25,16 +25,17 @@ openfda_tidydf <- function(data.frame.drug) {
 }
 
 
-output_csv <- function(..., append_existing = FALSE ) {
+output_csv <- function(dataf, append_existing = FALSE, path_output = "output/ndc_codes.csv") {
     # Outputs the data into a csv format. If you already have an existing csv
     # with name "ndc_codes" and you simply want to add to the end of that then
     # you can set append_existing = TRUE. If you append there could be duplicate rows
-    combined <- dplyr::bind_rows(...)
-    readr::write_csv(combined, path = "output/ndc_codes.csv", append = append_existing)
+    combined <- dplyr::bind_rows(dataf)
+    readr::write_csv(combined, path = path_output , append = append_existing)
     
 }
 
-ndc_query <- function(list_names, append = FALSE) {
+ndc_query <- function(list_names, append = FALSE, 
+                      path_output = "output/ndc_codes.csv") {
     require(purrr)
     require(dplyr)
 
@@ -48,14 +49,14 @@ ndc_query <- function(list_names, append = FALSE) {
         output_type <- inherits(df_drug, "data.frame")
         if(output_type){
             df_drug_clean <- openfda_tidydf(df_drug)
-        }else{
+        }else {
             df_drug_clean <- map(df_drug, openfda_tidydf)
             df_drug_clean <- do.call(bind_rows, df_drug_clean)
         }
         combined_df[[ind_drug]] <- df_drug_clean
     }
     
-    output_csv(combined_df, append_existing = append)
+    output_csv(combined_df, append_existing = append, path = path_output)
 }
 
 
