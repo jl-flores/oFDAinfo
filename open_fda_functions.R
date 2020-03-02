@@ -62,12 +62,25 @@ dataframed_unique <- function(queried.df) {
     require(openfda)
     require(dplyr)
     require(tidyr)
+    require(purrr)
     
-    # for some reason the data for each individual is hidden inside packaging.
+    output_type <- inherits(queried.df, "data.frame")
+
+    # if the data came from multiple (looping queries I need to map this
+    # function onto multiple arguments)
+    if(output_type) {
+        output_df <- queried.df %>% 
+            select(-openfda) %>% 
+            unnest_longer(packaging)
+        return(output_df)
+    }
+    
     output_df <- queried.df %>% 
-        select(-openfda) %>% 
-        unnest_longer(packaging)
+        map(select, -openfda) %>% 
+        map(unnest_longer, packaging)
     return(output_df)
+    # for some reason the data for each individual is hidden inside packaging.
+    
 }
 
 
