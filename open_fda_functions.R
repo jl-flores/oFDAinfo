@@ -1,9 +1,8 @@
 
 
 find_ndc <- function(name.category, name) {
+    #this executes the search
     run <- query(name.category, name)
-
-    # if data was found, run the next step
     df_run <- dataframed_unique(run)
     return(df_run)
 }

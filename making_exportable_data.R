@@ -35,7 +35,11 @@ output_csv <- function(dataf, append_existing = FALSE, path_output = "output/ndc
 }
 
 ndc_query <- function(list_names, append = FALSE, 
-                      path_output = "output/ndc_codes.csv") {
+                      path_output = "output/ndc_codes.csv",
+                      csv = TRUE) {
+    # The workhorse function: run it with a list of names of the format c("name
+    # type", "drug name") and it will output the csv (if csv = true) or else
+    # just a df (csv = false)
     require(purrr)
     require(dplyr)
 
@@ -55,8 +59,10 @@ ndc_query <- function(list_names, append = FALSE,
         }
         combined_df[[ind_drug]] <- df_drug_clean
     }
-    
-    output_csv(combined_df, append_existing = append, path = path_output)
+    if(csv) {
+        output_csv(combined_df, append_existing = append, path = path_output)
+    }
+    return(combined_df)
 }
 
 
