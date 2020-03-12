@@ -30,9 +30,8 @@ query <- function(search.list, search.drug, limit = 100, skip = 0) {
     
     queried <- .query_text(search.list, search.drug, skip = 0)
     # checking to make sure some data was found
-    if(nrow(queried) == 0) {
-        stop("There are no results for this combination of category and name. 
-             Are you sure they are correct?")
+    if(is.null(queried)) {
+        stop(paste("One of either", search.list, "or", search.drug, "is incorrectly spelt OR this combination of name-type and drug does not exist within the openFDA database"))
     }
     
     
