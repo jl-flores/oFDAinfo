@@ -1,12 +1,22 @@
 
-#' Title
-#'
-#' @param data.frame.drug 
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param data.frame.drug PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @seealso 
+#'  \code{\link[dplyr]{mutate}},\code{\link[dplyr]{select}}
+#'  \code{\link[tidyselect]{select_helpers}}
+#' @rdname openfda_tidydf
+#' @export 
+#' @importFrom dplyr mutate select
+#' @importFrom tidyselect any_of
 openfda_tidydf <- function(data.frame.drug) {
     # This function takes the output of the query as input and turns the data
     # into a replicable dataframe that can then be combined so that all the
@@ -33,6 +43,25 @@ openfda_tidydf <- function(data.frame.drug) {
 }
 
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param list.names PARAM_DESCRIPTION
+#' @param append.existing PARAM_DESCRIPTION, Default: FALSE
+#' @param path_output PARAM_DESCRIPTION, Default: 'output/ndc_codes.csv'
+#' @param csv PARAM_DESCRIPTION, Default: TRUE
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @seealso 
+#'  \code{\link[purrr]{map}}
+#' @rdname ndc_query
+#' @export 
+#' @importFrom purrr map
 ndc_query <- function(list.names, append.existing = FALSE, 
                       path_output = "output/ndc_codes.csv",
                       csv = TRUE) {
