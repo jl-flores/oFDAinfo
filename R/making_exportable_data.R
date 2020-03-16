@@ -1,4 +1,12 @@
 
+#' Title
+#'
+#' @param data.frame.drug 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 openfda_tidydf <- function(data.frame.drug) {
     # This function takes the output of the query as input and turns the data
     # into a replicable dataframe that can then be combined so that all the
@@ -6,19 +14,19 @@ openfda_tidydf <- function(data.frame.drug) {
     require(dplyr)
         
     delisted <- data.frame.drug %>% 
-        mutate(package_ndc = as.character(packaging$package_ndc),
+        dplyr::mutate(package_ndc = as.character(packaging$package_ndc),
                marketing_start_date = as.character(packaging$marketing_start_date),
                description = as.character(packaging$description),
                sample = as.character(packaging$sample)) %>% 
-            select(-packaging)
+            dplyr::select(-packaging)
     renamed <- delisted %>% 
-        select(tidyselect::any_of(c("generic_name","brand_name", "package_ndc", 
+        dplyr::select(tidyselect::any_of(c("generic_name","brand_name", "package_ndc", 
                                     "product_ndc", "brand_name_base","labeler_name",
                                     "route", "dosage_form", "description"))
                )
     
     if("route" %in% names(renamed)) {
-        renamed <- mutate(renamed, route = as.character(route))
+        renamed <- dplyr::mutate(renamed, route = as.character(route))
     }
     
     return(renamed)
@@ -44,12 +52,12 @@ ndc_query <- function(list.names, append.existing = FALSE,
             df_drug_clean <- openfda_tidydf(df_drug)
         }else {
             df_drug_clean <- purrr::map(df_drug, openfda_tidydf)
-            df_drug_clean <- do.call(bind.rows, df_drug_clean)
+            df_drug_clean <- do.call(rbind, df_drug_clean)
         }
         combined_df[[ind_drug]] <- df_drug_clean
     }
     
-    combined_df <- bind.rows(combined_df)
+    combined_df <- rbind(combined_df)
     
     if(csv) {
         write.csv(combined_df, append = append.existing, file = path_output)
