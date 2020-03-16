@@ -1,0 +1,22 @@
+Package: oFDAinfo
+Title: Pulls Data From The FDA openAPI
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jonah",
+           family = "Gorodensky",
+           role = c("aut", "cre"),
+           email = "jonahgoro@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: oFDAinfo pulls data from the FDA's openAPI. The package allows users to specify drugs of interest, and the data available will be collated and output as a dataframe (and a saved to a file if desired). As of now the functions only work on NDC type queries within the FDA.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+Imports: 
+    openfda,
+    dplyr,
+    purrr,
+    tidyr,
+    tidyselect
+Suggests: 
+    readr
