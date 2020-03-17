@@ -2,8 +2,8 @@
 
 export(dataframed_unique)
 export(ndc_query)
-export(openfda_tidydf)
 export(query)
+importFrom(dplyr,"%>%")
 importFrom(dplyr,bind_rows)
 importFrom(dplyr,mutate)
 importFrom(dplyr,select)
