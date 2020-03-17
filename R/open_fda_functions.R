@@ -21,19 +21,15 @@ find_ndc <- function(name.category, name) {
 
 
 
-#' @title query
+#' @title Create and execute search parameters for use within FDA's openFDA
 #' @description Builds and executes queries. Allows for scraping all the information from drugs who have more than 100 entries (the maximum allowed by openFDA).  
 #' @param search.list What category your drug name falls under (Ex. "generic_name" or "brand_name")
 #' @param search.drug The name of the drug (Ex. "ibuprofen")
-#' @param limit PARAM_DESCRIPTION, Default: 100
-#' @param skip PARAM_DESCRIPTION, Default: 0
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
+#' @return A list with the results of scraping the API
+#' @details Output of this function is often very complicated and impossible to work with as some of the lists contain dataframes with list-columns
 #' @examples 
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' query("generic_name", "ibuprofen")
 #' }
 #' @seealso 
 #'  \code{\link[openfda]{fda_query}},\code{\link[openfda]{fda_api_key}},\code{\link[openfda]{fda_limit}},\code{\link[openfda]{fda_skip}},\code{\link[openfda]{fda_filter}},\code{\link[openfda]{fda_search}},\code{\link[openfda]{fda_exec}}
@@ -84,16 +80,15 @@ query <- function(search.list, search.drug) {
 }
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param queried.df PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
+#' @title Handles the API's strange API output format
+#' @description Turn API's output into a list of clean (though not necessarily tidy) dataframes wherein each entry in one pull from the API
+#' @param queried.df The output of the \code{\link{query}} function
+#' @return List of clean dataframes. Each entry is one API pull
 #' @details DETAILS
 #' @examples 
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' x <- query("generic_name", "ibuprofen")
+#' dataframed_unique(x)
 #' }
 #' @seealso 
 #'  \code{\link[dplyr]{select}}
@@ -105,13 +100,9 @@ query <- function(search.list, search.drug) {
 #' @importFrom purrr map
 #' @importFrom tidyr unnest_longer
 dataframed_unique <- function(queried.df) {
-    # This function takes the out output of a drug query and turns it into a
-    # database where each row is different drug entry
     
     output_type <- inherits(queried.df, "data.frame")
 
-    # if the data came from multiple (looping queries I need to map this
-    # function onto multiple argumen    ts)
     if(output_type) {
         output_df <- queried.df %>% 
             dplyr::select(-openfda) %>% 
