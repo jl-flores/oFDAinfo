@@ -1,19 +1,16 @@
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param name.category PARAM_DESCRIPTION
-#' @param name PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
+#' @title find_ndc
+#' @description helper function that runs the \code{\link{query}} and \code{\link{dataframed_unique}} functions
+#' @param name.category What category your drug name falls under (Ex. "generic_name" or "brand_name")
+#' @param name The name of the drug
+#' @return Dataframe of one drug's information from the openFDA API
 #' @details DETAILS
 #' @examples 
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' find_ndc("generic_name", "ibuprofen")
 #' }
 #' @rdname find_ndc
-#' @export 
 find_ndc <- function(name.category, name) {
     #this executes the search
     run <- query(name.category, name)
@@ -101,7 +98,7 @@ query <- function(search.list, search.drug, limit = 100, skip = 0) {
 #' @seealso 
 #'  \code{\link[dplyr]{select}},\code{\link[dplyr]{character(0)}}
 #'  \code{\link[purrr]{map}}
-#'  \code{\link[tidyr]{hoist}}
+#'  \code{\link[tidyr]{unnest_longer}}
 #' @rdname dataframed_unique
 #' @export 
 #' @importFrom dplyr select
@@ -118,7 +115,7 @@ dataframed_unique <- function(queried.df) {
     if(output_type) {
         output_df <- queried.df %>% 
             dplyr::select(-openfda) %>% 
-            dplyr::unnest_longer(packaging)
+            tidyr::unnest_longer(packaging)
         return(output_df)
     }
     

@@ -62,6 +62,7 @@ openfda_tidydf <- function(data.frame.drug) {
 #' @rdname ndc_query
 #' @export 
 #' @importFrom purrr map
+#' @importFrom dplyr bind_rows
 ndc_query <- function(list.names, append.existing = FALSE, 
                       path_output = "output/ndc_codes.csv",
                       csv = TRUE) {
@@ -81,12 +82,12 @@ ndc_query <- function(list.names, append.existing = FALSE,
             df_drug_clean <- openfda_tidydf(df_drug)
         }else {
             df_drug_clean <- purrr::map(df_drug, openfda_tidydf)
-            df_drug_clean <- do.call(rbind, df_drug_clean)
+            df_drug_clean <- do.call(bind_rows, df_drug_clean)
         }
         combined_df[[ind_drug]] <- df_drug_clean
     }
     
-    combined_df <- rbind(combined_df)
+    combined_df <- bind_rows(combined_df)
     
     if(csv) {
         write.csv(combined_df, append = append.existing, file = path_output)
