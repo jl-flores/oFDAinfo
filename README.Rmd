@@ -22,7 +22,11 @@ The goal of oFDAinfo is to pull drug data from the [openFDA API](https://open.fd
 
 ## Installation
 
+<<<<<<< HEAD
 This package relies heavily on the [openfda](https://github.com/ropenhealth/openfda) package, which must be installed prior to downloading oFDAinfo. You can install the development version of oFDAinfo from [GitHub](https://github.com/) with:
+=======
+This package relies heavily on the [openfda](https://github.com/ropenhealth/openfda), which must be installed prior to downloading oFDAinfo. You can install the development version of oFDAinfo from [GitHub](https://github.com/) with:
+>>>>>>> master
 
 ``` r
 # install.packages("devtools")

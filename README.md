@@ -14,7 +14,11 @@ though there are many other uses.
 ## Installation
 
 This package relies heavily on the
+<<<<<<< HEAD
 [openfda](https://github.com/ropenhealth/openfda) package, which must be
+=======
+[openfda](https://github.com/ropenhealth/openfda), which must be
+>>>>>>> master
 installed prior to downloading oFDAinfo. You can install the development
 version of oFDAinfo from [GitHub](https://github.com/) with:
 
