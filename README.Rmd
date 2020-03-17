@@ -18,43 +18,37 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of oFDAinfo is to ...
+The goal of oFDAinfo is to pull drug data from the [openFDA API](https://open.fda.gov/). I use it to find their package-NDC code, though there are many other uses. 
 
 ## Installation
 
-You can install the released version of oFDAinfo from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("oFDAinfo")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+This package relies heavily on the [openfda](https://github.com/ropenhealth/openfda), which must be installed prior to downloading oFDAinfo. You can install the development version of oFDAinfo from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
+devtools::install_github("ropenhealth/openfda")
 devtools::install_github("jonahgorodensky/oFDAinfo")
 ```
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
+At its most basic there is only one function of interest, `ndc_query`, which both pulls from the API and cleans the data into one dataframe. 
 ```{r example}
 library(oFDAinfo)
 ## basic example code
+drugs_of_interest <- list(c("generic_name", "methotrexate"), 
+                          c("brand_name", "humira")
+                          )
+output <- ndc_query(drugs_of_interest,  csv = FALSE)
+output
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+Assuming the same type (eg. generic_name or brand_name) it is equally possible to run `ndc_query(c("generic_name","drug1+drug2")` or `ndc_query(c("generic_name","drug1"), c("generic_name","drug2")`. Though the first is more concise I prefer the second as, although the outputs are equivalent, the ordering of the rows is more predictable when each drug is given its own call.
+```{r}
+first <- ndc_query(list(c("generic_name", "ibuprofen"), c("generic_name","ustekinumab")), csv = FALSE)
+second <- ndc_query(list(c("generic_name", "ibuprofen+ustekinumab")), csv = FALSE)
 
-```{r cars}
-summary(cars)
+dplyr::all_equal(first, second, ignore_row_order = TRUE)
+dplyr::all_equal(first, second, ignore_row_order = FALSE)
+
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
