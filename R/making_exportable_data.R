@@ -13,11 +13,8 @@
 #'  \code{\link[dplyr]{mutate}},\code{\link[dplyr]{select}}
 #'  \code{\link[tidyselect]{select_helpers}}
 #' @rdname openfda_tidydf
-<<<<<<< HEAD
 #' @importFrom dplyr mutate select %>% 
-=======
 #' @importFrom dplyr mutate select
->>>>>>> master
 #' @importFrom tidyselect any_of
 openfda_cleandf <- function(data.frame.drug) {
 
@@ -45,13 +42,10 @@ openfda_cleandf <- function(data.frame.drug) {
 #' @title Run a query of the API and output a clean, usable dataframe
 #' @description Run a query of the FDA's API in its entirety and output the data as a dataframe
 #' @param list.names a list of query parameters
-<<<<<<< HEAD
 #' @param append.existing Do you wish to add the output to an already created text file: Default: FALSE
 #' @param path.output Where would you like to output the csv: Default: 'output/ndc_codes.csv'
-=======
 #' @param append.existing Do you wish to add the output to an already created text file Default: FALSE
 #' @param path.output Where would you like to output the csv, Default: 'output/ndc_codes.csv'
->>>>>>> master
 #' @param csv Do you want to output a csv. If false, \code{path.output} and \code{append.existing} is irrelevant, Default: FALSE
 #' @return Returns a dataframe with all the results of the query 
 #' @details This is the workhorse function of the \code{oFDAinfo} package
