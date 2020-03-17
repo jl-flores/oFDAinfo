@@ -3,7 +3,7 @@
 #' @title find_ndc
 #' @description helper function that runs the \code{\link{query}} and \code{\link{dataframed_unique}} functions
 #' @param name.category What category your drug name falls under (Ex. "generic_name" or "brand_name")
-#' @param name The name of the drug
+#' @param name The name of the drug (Ex. "ibuprofen")
 #' @return Dataframe of one drug's information from the openFDA API
 #' @details DETAILS
 #' @examples 
@@ -21,10 +21,10 @@ find_ndc <- function(name.category, name) {
 
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param search.list PARAM_DESCRIPTION
-#' @param search.drug PARAM_DESCRIPTION
+#' @title query
+#' @description Builds and executes queries. Allows for scraping all the information from drugs who have more than 100 entries (the maximum allowed by openFDA).  
+#' @param search.list What category your drug name falls under (Ex. "generic_name" or "brand_name")
+#' @param search.drug The name of the drug (Ex. "ibuprofen")
 #' @param limit PARAM_DESCRIPTION, Default: 100
 #' @param skip PARAM_DESCRIPTION, Default: 0
 #' @return OUTPUT_DESCRIPTION
@@ -42,14 +42,14 @@ find_ndc <- function(name.category, name) {
 #' @export 
 #' @importFrom openfda fda_query fda_api_key fda_limit fda_skip fda_filter fda_search fda_exec
 #' @importFrom purrr discard
-query <- function(search.list, search.drug, limit = 100, skip = 0) {
-    # this function takes a search.list (like "generic_name" or "brand_name")
-    # and then the name of the drug you are interested in and outputs a
-    # dataframe from the openfda
-    .query_text  <- function(search.list, search.drug, limit = 100, skip){
+query <- function(search.list, search.drug) {
+    
+    limit <- 100
+    
+    .query_text  <- function(search.list, search.drug, lim = 100, skip){
         openfda::fda_query("/drug/ndc.json") %>% 
         openfda::fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
-        openfda::fda_limit(limit) %>% 
+        openfda::fda_limit(lim) %>% 
         openfda::fda_skip(skip) %>% 
         openfda::fda_filter(search.list, search.drug) %>% 
         openfda::fda_search() %>% 
@@ -96,7 +96,7 @@ query <- function(search.list, search.drug, limit = 100, skip = 0) {
 #'  }
 #' }
 #' @seealso 
-#'  \code{\link[dplyr]{select}},\code{\link[dplyr]{character(0)}}
+#'  \code{\link[dplyr]{select}}
 #'  \code{\link[purrr]{map}}
 #'  \code{\link[tidyr]{unnest_longer}}
 #' @rdname dataframed_unique
