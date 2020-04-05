@@ -14,11 +14,7 @@ though there are many other uses.
 ## Installation
 
 This package relies heavily on the
-<<<<<<< HEAD
 [openfda](https://github.com/ropenhealth/openfda) package, which must be
-=======
-[openfda](https://github.com/ropenhealth/openfda), which must be
->>>>>>> master
 installed prior to downloading oFDAinfo. You can install the development
 version of oFDAinfo from [GitHub](https://github.com/) with:
 
@@ -62,10 +58,10 @@ output
 
 Assuming the same type (eg. generic\_name or brand\_name) it is equally
 possible to run `ndc_query(c("generic_name","drug1+drug2")` or
-`ndc_query(c("generic_name","drug1"), c("generic_name","drug2")`. Though
-the first is more concise I prefer the second as, although the outputs
-are equivalent, the ordering of the rows is more predictable when each
-drug is given its own
+`ndc_query(list(c("generic_name","drug1"), c("generic_name","drug2"))`.
+Though the first is more concise I prefer the second as, although the
+outputs are equivalent, the ordering of the rows is more predictable
+when each drug is given its own
 call.
 
 ``` r
