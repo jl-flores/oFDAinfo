@@ -47,6 +47,7 @@ openfda_cleandf <- function(data.frame.drug) {
 #' @param append.existing Do you wish to add the output to an already created text file Default: FALSE
 #' @param path.output Where would you like to output the csv, Default: 'output/ndc_codes.csv'
 #' @param csv Do you want to output a csv. If false, \code{path.output} and \code{append.existing} is irrelevant, Default: FALSE
+#' @param api  The user's openFDA api key. If you do not have a code you can obtain one from \url{https://open.fda.gov/apis/authentication/}
 #' @return Returns a dataframe with all the results of the query 
 #' @details This is the workhorse function of the \code{oFDAinfo} package
 #' @examples 

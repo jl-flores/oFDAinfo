@@ -4,6 +4,7 @@
 #' @description helper function that runs the \code{\link{query}} and \code{\link{dataframed_unique}} functions
 #' @param name.category What category your drug name falls under (Ex. "generic_name" or "brand_name")
 #' @param name The name of the drug (Ex. "ibuprofen")
+#' @param api  The user's openFDA api key
 #' @return Dataframe of one drug's information from the openFDA API
 #' @details DETAILS
 #' @examples 
@@ -25,6 +26,7 @@ find_ndc <- function(name.category, name, api) {
 #' @description Builds and executes queries. Allows for scraping all the information from drugs who have more than 100 entries (the maximum allowed by openFDA).  
 #' @param search.list What category your drug name falls under (Ex. "generic_name" or "brand_name")
 #' @param search.drug The name of the drug (Ex. "ibuprofen")
+#' @param api  The user's openFDA api key
 #' @return A list with the results of scraping the API
 #' @details Output of this function is often very complicated and impossible to work with as some of the lists contain dataframes with list-columns
 #' @examples 
