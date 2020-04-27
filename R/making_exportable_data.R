@@ -60,7 +60,7 @@ openfda_cleandf <- function(data.frame.drug) {
 #' @export 
 #' @importFrom purrr map
 #' @importFrom dplyr bind_rows %>% 
-ndc_query <- function(list.names, append.existing = FALSE, 
+ndc_query <- function(list.names, api_user, append.existing = FALSE, 
                       path.output = "output/ndc_codes.csv",
                       csv = FALSE) {
     
@@ -70,7 +70,7 @@ ndc_query <- function(list.names, append.existing = FALSE,
     for(ind_drug in 1:num_drugs){
         param <- list.names[[ind_drug]][1]
         drug  <- list.names[[ind_drug]][2]
-        df_drug <- find_ndc(param, drug)
+        df_drug <- find_ndc(param, drug, api = api_user)
         output_type <- inherits(df_drug, "data.frame")
         if(output_type){
             df_drug_clean <- openfda_cleandf(df_drug)

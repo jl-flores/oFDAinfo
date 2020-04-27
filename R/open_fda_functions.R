@@ -11,9 +11,9 @@
 #' find_ndc("generic_name", "ibuprofen")
 #' }
 #' @rdname find_ndc
-find_ndc <- function(name.category, name) {
+find_ndc <- function(name.category, name, api) {
     #this executes the search
-    run <- query(name.category, name)
+    run <- query(name.category, name, api_key = api)
     df_run <- dataframed_unique(run)
     return(df_run)
 }
@@ -39,13 +39,13 @@ find_ndc <- function(name.category, name) {
 #' @importFrom openfda fda_query fda_api_key fda_limit fda_skip fda_filter fda_search fda_exec
 #' @importFrom purrr discard
 #' @importFrom dplyr %>%
-query <- function(search.list, search.drug) {
+query <- function(search.list, search.drug, api_key) {
     
     limit <- 100
     
-    .query_text  <- function(search.list, search.drug, lim = 100, skip){
+    .query_text  <- function(search.list, search.drug, lim = 100, skip, api_key_temp){
         openfda::fda_query("/drug/ndc.json") %>% 
-        openfda::fda_api_key("kwBweTyY0zxYfj27l7t6P7o68nSdxYaBspGyoBBy") %>% 
+        openfda::fda_api_key(api_key_temp) %>% 
         openfda::fda_limit(lim) %>% 
         openfda::fda_skip(skip) %>% 
         openfda::fda_filter(search.list, search.drug) %>% 
@@ -53,7 +53,7 @@ query <- function(search.list, search.drug) {
         openfda::fda_exec()
     }
     
-    queried <- .query_text(search.list, search.drug, skip = 0)
+    queried <- .query_text(search.list, search.drug, skip = 0, api_key_temp = api_key)
     # checking to make sure some data was found
     if(is.null(queried)) {
         stop(paste("One of either", search.list, "or", search.drug, "is incorrectly spelt OR this combination of name-type and drug does not exist within the openFDA database"))
@@ -69,7 +69,7 @@ query <- function(search.list, search.drug) {
         output_list[[1]] <- queried
         index <- 2
         while (nrow(queried) == 100) {
-            output_list[[index]] <- .query_text(search.list, search.drug, skip = skip)
+            output_list[[index]] <- .query_text(search.list, search.drug, api_key_temp = api_key, skip = skip)
             queried <- output_list[[index]]
             skip <- 100 * index
             index <- index + 1
