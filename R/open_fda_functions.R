@@ -4,7 +4,7 @@
 #' @description helper function that runs the \code{\link{query}} and \code{\link{dataframed_unique}} functions
 #' @param name.category What category your drug name falls under (Ex. "generic_name" or "brand_name")
 #' @param name The name of the drug (Ex. "ibuprofen")
-#' @param api  The user's openFDA api key
+#' @param api.key  The user's openFDA api key
 #' @return Dataframe of one drug's information from the openFDA API
 #' @details DETAILS
 #' @examples 
@@ -14,7 +14,7 @@
 #' @rdname find_ndc
 find_ndc <- function(name.category, name, api) {
     #this executes the search
-    run <- query(name.category, name, api_key = api)
+    run <- query(name.category, name, api.key = api)
     df_run <- dataframed_unique(run)
     return(df_run)
 }
@@ -26,7 +26,7 @@ find_ndc <- function(name.category, name, api) {
 #' @description Builds and executes queries. Allows for scraping all the information from drugs who have more than 100 entries (the maximum allowed by openFDA).  
 #' @param search.list What category your drug name falls under (Ex. "generic_name" or "brand_name")
 #' @param search.drug The name of the drug (Ex. "ibuprofen")
-#' @param api  The user's openFDA api key
+#' @param api.key  The user's openFDA api key
 #' @return A list with the results of scraping the API
 #' @details Output of this function is often very complicated and impossible to work with as some of the lists contain dataframes with list-columns
 #' @examples 
@@ -41,13 +41,13 @@ find_ndc <- function(name.category, name, api) {
 #' @importFrom openfda fda_query fda_api_key fda_limit fda_skip fda_filter fda_search fda_exec
 #' @importFrom purrr discard
 #' @importFrom dplyr %>%
-query <- function(search.list, search.drug, api_key) {
+query <- function(search.list, search.drug, api.key) {
     
     limit <- 100
     
-    .query_text  <- function(search.list, search.drug, lim = 100, skip, api_key_temp){
+    .query_text  <- function(search.list, search.drug, lim = 100, skip, api.key.temp){
         openfda::fda_query("/drug/ndc.json") %>% 
-        openfda::fda_api_key(api_key_temp) %>% 
+        openfda::fda_api_key(api.key.temp) %>% 
         openfda::fda_limit(lim) %>% 
         openfda::fda_skip(skip) %>% 
         openfda::fda_filter(search.list, search.drug) %>% 
@@ -55,7 +55,7 @@ query <- function(search.list, search.drug, api_key) {
         openfda::fda_exec()
     }
     
-    queried <- .query_text(search.list, search.drug, skip = 0, api_key_temp = api_key)
+    queried <- .query_text(search.list, search.drug, skip = 0, api.key.temp = api.key)
     # checking to make sure some data was found
     if(is.null(queried)) {
         stop(paste("One of either", search.list, "or", search.drug, "is incorrectly spelt OR this combination of name-type and drug does not exist within the openFDA database"))
@@ -71,7 +71,7 @@ query <- function(search.list, search.drug, api_key) {
         output_list[[1]] <- queried
         index <- 2
         while (nrow(queried) == 100) {
-            output_list[[index]] <- .query_text(search.list, search.drug, api_key_temp = api_key, skip = skip)
+            output_list[[index]] <- .query_text(search.list, search.drug, api.key.temp = api.key, skip = skip)
             queried <- output_list[[index]]
             skip <- 100 * index
             index <- index + 1
